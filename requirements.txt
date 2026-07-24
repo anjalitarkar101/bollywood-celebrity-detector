@@ -1,0 +1,21 @@
+# ==========================================
+# requirements.txt - Bollywood Celebrity Detector
+# ==========================================
+
+# Core Dependencies
+tensorflow-macos==2.13.0
+tensorflow-metal==1.2.0
+mtcnn==0.1.0
+opencv-python==4.8.1.78
+
+# Web App
+streamlit==1.50.0
+
+# Data Handling
+numpy==1.24.3
+scikit-learn==1.3.0
+Pillow==10.0.0
+tqdm==4.66.0
+
+# DeepFace and its dependencies
+deepface==0.0.79
