@@ -38,17 +38,6 @@ pythonenv*
 *.iml
 *.code-workspace
 
-# ----------------------------------------------------------
-# Data Files (Celebrity Images - Large)
-# ----------------------------------------------------------
-data/
-*.jpg
-*.jpeg
-*.png
-*.bmp
-*.gif
-*.tiff
-
 
 # ----------------------------------------------------------
 # Uploads (Temporary Uploaded Images)
