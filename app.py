@@ -39,7 +39,7 @@ def main():
 
         st.markdown("### 🧠 Model Info")
         st.markdown("""
-            - **Face Detection:** MTCNN
+            - **Face Detection:** DeepFace (Built-in)
             - **Feature Extraction:** DeepFace (VGG-Face)
             - **Similarity:** Cosine Similarity
             - **Celebrities:** Bollywood Actors
@@ -158,7 +158,7 @@ def main():
     # Footer
     # ==========================================
     st.markdown("---")
-    st.caption("🔍 Powered by MTCNN (Face Detection) + DeepFace (Feature Extraction)")
+    st.caption("🔍 Powered by DeepFace (Face Detection + Feature Extraction)")
 
 
 if __name__ == "__main__":

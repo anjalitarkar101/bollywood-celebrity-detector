@@ -1,7 +1,7 @@
 # 🎬 Bollywood Celebrity Detector
 
 ## 📖 Overview
-A **Bollywood Celebrity Detector** built with Streamlit and Deep Learning that finds your celebrity lookalike. The system uses MTCNN for face detection and DeepFace (VGG-Face) for facial feature extraction to match your uploaded photo with a database of 100 Bollywood celebrities.
+A **Bollywood Celebrity Detector** built with Streamlit and Deep Learning that finds your celebrity lookalike. The system uses DeepFace (VGG-Face) for both face detection and facial feature extraction to match your uploaded photo with a database of 100 Bollywood celebrities.
 
 ---
 
@@ -17,10 +17,8 @@ A **Bollywood Celebrity Detector** built with Streamlit and Deep Learning that f
 
 ## 🛠️ Technologies Used
 - Python 3.10+ - Core programming language
-- DeepFace - Facial recognition and feature extraction
-- MTCNN - Face detection
+- DeepFace - Facial recognition , face detection , and feature extraction
 - Streamlit - Web application framework
-- OpenCV - Image processing
 - NumPy - Numerical operations
 - Scikit-learn - Similarity calculation (Cosine Similarity)
 
@@ -123,22 +121,18 @@ Open your browser and navigate to http://localhost:8501
 
 ## 📊 How It Works
 
-1. Face Detection (MTCNN)
-- Detects faces in the uploaded image
-- Crops the face region
-- Handles multiple faces (uses the first detected face)
-
-2. Feature Extraction (DeepFace - VGG-Face)
+1. Face Detection & Feature Extraction (DeepFace - VGG-Face)
+- Automatically detects faces in the uploaded image
+- Crops and processes the face region
 - Extracts 4096-dimensional feature vectors
 - Normalizes features using L2 normalization
-- Creates embeddings for each celebrity image
 
-3. Similarity Calculation (Cosine Similarity)
+2. Similarity Calculation (Cosine Similarity)
 - Compares uploaded face features with celebrity database
 - Calculates cosine similarity scores
 - Returns the best match with confidence percentage
 
-4. Prediction Pipeline
+3. Prediction Pipeline
 ```txt
 Upload Image
     ↓
@@ -157,10 +151,7 @@ Best Match with Confidence Score
 
 ## 🔧 Dependencies
 ```txt
-tensorflow-macos==2.13.0
-tensorflow-metal==1.2.0
-mtcnn==0.1.0
-opencv-python==4.8.1.78
+tensorflow==2.13.0
 streamlit==1.50.0
 numpy==1.24.3
 scikit-learn==1.3.0
@@ -223,8 +214,7 @@ If you find this project useful, please give it a star on GitHub!
 ---
 
 ## 🙏 Acknowledgments
-- DeepFace - For facial recognition and feature extraction
-- MTCNN - For face detection
+- DeepFace - For facial recognition , detection and feature extraction
 - Streamlit - For the awesome web framework
 - Sushil Kumar Yadav - For the Bollywood Celeb Localized Face Dataset
 
