@@ -14,7 +14,7 @@ from predict import get_extractor, load_data, find_celebrity_match
 def main():
     # Page Configuration
     st.set_page_config(
-        page_title="Bollywood Celebrity Detector Using CNN",
+        page_title="Bollywood Celebrity Detector",
         page_icon="🎬",
         layout="wide",
         initial_sidebar_state="expanded"

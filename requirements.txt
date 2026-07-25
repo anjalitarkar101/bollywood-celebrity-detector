@@ -6,7 +6,7 @@
 tensorflow-macos==2.13.0
 tensorflow-metal==1.2.0
 mtcnn==0.1.0
-opencv-python==4.8.1.78
+
 
 # Web App
 streamlit==1.50.0

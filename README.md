@@ -1,7 +1,7 @@
 # 🎬 Bollywood Celebrity Detector
 
 ## 📖 Overview
-A Bollywood Celebrity Detector built with Streamlit and Deep Learning that finds your celebrity lookalike. The system uses MTCNN for face detection and DeepFace (VGG-Face) for facial feature extraction to match your uploaded photo with a database of 100 Bollywood celebrities.
+A **Bollywood Celebrity Detector** built with Streamlit and Deep Learning that finds your celebrity lookalike. The system uses MTCNN for face detection and DeepFace (VGG-Face) for facial feature extraction to match your uploaded photo with a database of 100 Bollywood celebrities.
 
 ---
 
