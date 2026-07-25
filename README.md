@@ -7,7 +7,7 @@ A **Bollywood Celebrity Detector** built with Streamlit and Deep Learning that f
 
 ## ✨ Features
 - 🎭 Celebrity Detection - Finds your Bollywood celebrity lookalike using Deep Learning
-- 📸 Face Detection - Uses MTCNN for accurate face detection
+- 📸 Face Detection - Uses DeepFace (Built-in) for face detection
 - 🔍 Feature Extraction - Utilizes DeepFace (VGG-Face) for facial feature extraction
 - 📊 Confidence Score - Shows similarity confidence percentage
 - 🎯 Real-time Results - Instant matching with visual feedback
@@ -107,8 +107,7 @@ python feature_extractor.py
 ```
 This will:
 - Load all celebrity images
-- Detect faces using MTCNN
-- Extract features using DeepFace (VGG-Face)
+- Detect faces and extract features using DeepFace (VGG-Face)
 - Save embeddings and filenames to models/ folder
 
 ### Step 5: Run the Application

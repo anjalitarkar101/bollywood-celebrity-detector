@@ -1,84 +1,67 @@
-# ==========================================
+# ==========================================================
 # predict.py - Bollywood Celebrity Detector
-# ==========================================
+# ==========================================================
 
 import os
 import pickle
 import numpy as np
 import streamlit as st
 from sklearn.metrics.pairwise import cosine_similarity
-from feature_extractor import FeatureExtractor
+from deepface import DeepFace
 
 
-# ==========================================
-# Load Functions
-# ==========================================
+class FeatureExtractor:
+    def __init__(self, model_name="VGG-Face"):
+        self.model_name = model_name
+
+    def extract_features(self, img_path):
+        try:
+            result = DeepFace.represent(
+                img_path=img_path,
+                model_name=self.model_name,
+                detector_backend='opencv',
+                enforce_detection=False
+            )
+
+            if result and len(result) > 0:
+                feature_vector = np.array(result[0]['embedding'])
+                return feature_vector / np.linalg.norm(feature_vector)
+
+            return None
+        except Exception as e:
+            print(f"Error extracting features: {e}")
+            return None
+
 
 @st.cache_resource
 def get_extractor():
-    """Load the feature extractor model."""
     return FeatureExtractor(model_name="VGG-Face")
 
 
 @st.cache_data
 def load_data():
-    """
-    Load celebrity embeddings and filenames.
-
-    Returns:
-        tuple: (feature_vectors, filenames)
-    """
     try:
         with open('models/embeddings.pkl', 'rb') as f:
             feature_vectors = pickle.load(f)
+
         with open('models/filenames.pkl', 'rb') as f:
             filenames = pickle.load(f)
+
         return feature_vectors, filenames
     except FileNotFoundError:
         return None, None
 
 
-# ==========================================
-# Recommendation Function
-# ==========================================
+def find_celebrity_match(feature_vectors, uploaded_features, filenames):
+    similarities = cosine_similarity([uploaded_features], feature_vectors)[0]
+    best_idx = np.argmax(similarities)
+    best_similarity = similarities[best_idx]
 
-def find_celebrity_match(feature_vectors, uploaded_feature_vector, filenames):
-    """
-    Find the best celebrity match using cosine similarity.
-
-    Args:
-        feature_vectors: All celebrity feature vectors
-        uploaded_feature_vector: Uploaded image feature vector
-        filenames: List of celebrity image paths
-
-    Returns:
-        dict: {
-            'name': Celebrity name,
-            'image_path': Path to celebrity image,
-            'similarity': Similarity score
-        }
-    """
-    similarities = []
-
-    # Calculate cosine similarity with each celebrity
-    for celebrity_feature_vector in feature_vectors:
-        sim = cosine_similarity(
-            uploaded_feature_vector.reshape(1, -1),
-            celebrity_feature_vector.reshape(1, -1)
-        )[0][0]
-        similarities.append(sim)
-
-    # Get the best match (highest similarity score)
-    top_idx = np.argmax(similarities)
-
-    # Extract actor name from file path
-    # Example: data/Aamir_Khan/image1.jpg -> Aamir Khan
-    file_path = filenames[top_idx]
-    actor_name = file_path.split(os.sep)[1]  # Get folder name
-    actor_name = actor_name.replace('_', ' ')  # Replace underscores with spaces
+    file_path = filenames[best_idx]
+    celebrity_name = file_path.split(os.sep)[1] if os.sep in file_path else file_path.split('/')[1]
 
     return {
-        'name': actor_name,
+        'name': celebrity_name,
         'image_path': file_path,
-        'similarity': similarities[top_idx]
+        'similarity': best_similarity
     }

@@ -7,87 +7,36 @@ import pickle
 import numpy as np
 from tqdm import tqdm
 from PIL import Image
-from mtcnn import MTCNN
 from deepface import DeepFace
 
 
 class FeatureExtractor:
 
     def __init__(self, model_name="VGG-Face"):
-        print("🔄 Loading face detector model ...")
-        self.detector = MTCNN()
-        print("✅ Face detector ready!")
-
         print(f"🔄 Loading DeepFace with {model_name} model...")
         self.model_name = model_name
         print(f"✅ Feature extractor ready!")
 
     def extract_features(self, img_path):
-        # Step 1: Read image using PIL
+        """Extract features using DeepFace (with built-in detection)"""
         try:
-            img_pil = Image.open(img_path)
-            img = np.array(img_pil)
-        except Exception as e:
-            print(f"⚠️ Failed to read image {img_path}: {e}")
+            list_of_dicts = DeepFace.represent(
+                img_path=img_path,
+                model_name=self.model_name,
+                detector_backend='opencv',
+                enforce_detection=False
+            )
+
+            if list_of_dicts and len(list_of_dicts) > 0:
+                first_face_dict = list_of_dicts[0]
+                feature_vector = np.array(first_face_dict['embedding'])
+                normalized_feature_vector = feature_vector / np.linalg.norm(feature_vector)
+                return normalized_feature_vector
+
             return None
 
-        # Step 2: Detect faces using MTCNN (expects RGB)
-        try:
-            results = self.detector.detect_faces(img)
         except Exception as e:
-            print(f"⚠️ Face detection failed for {img_path}: {e}")
-            return None
-
-        if not results:
-            return None
-
-        # Step 3: Extract the first detected face
-        try:
-            # Get bounding box coordinates
-            x, y, width, height = results[0]['box']
-            x, y = max(0, x), max(0, y)
-            width, height = abs(width), abs(height)
-
-            # Crop the face from the original image
-            face_array = img[y:y + height, x:x + width]
-
-            if face_array.size == 0:
-                return None
-
-            # Convert numpy array to PIL Image for saving
-            face_pil = Image.fromarray(face_array)
-
-            # Step 4: Save face temporarily for DeepFace processing
-            temp_face_path = "temp_face.jpg"
-            face_pil.save(temp_face_path)
-
-            # Step 5: Extract features using DeepFace
-            try:
-                list_of_dicts = DeepFace.represent(
-                    img_path=temp_face_path,
-                    model_name=self.model_name,
-                    detector_backend='skip',
-                    enforce_detection=False
-                )
-
-                # Clean up temporary file
-                if os.path.exists(temp_face_path):
-                    os.remove(temp_face_path)
-
-                if list_of_dicts and len(list_of_dicts) > 0:
-                    first_face_dict = list_of_dicts[0]
-                    feature_vector = np.array(first_face_dict['embedding'])
-                    normalized_feature_vector = feature_vector / np.linalg.norm(feature_vector)
-                    return normalized_feature_vector
-
-                return None
-
-            except Exception as e:
-                print(f"⚠️ DeepFace feature extraction failed: {e}")
-                return None
-
-        except Exception as e:
-            print(f"⚠️ Error processing {img_path}: {e}")
+            print(f"⚠️ Feature extraction failed for {img_path}: {e}")
             return None
 
 
@@ -97,7 +46,7 @@ def batch_extract_features():
     print("=" * 60)
 
     if not os.path.exists('data'):
-        print("❌ 'data' folder not found! Please create it and add celebrity images.")
+        print("❌ 'data' folder not found!")
         return
 
     actors = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
@@ -118,7 +67,6 @@ def batch_extract_features():
                     filenames.append(file_path)
     print(f"🖼️ Found {len(filenames)} valid images")
 
-    # Save filenames
     os.makedirs('models', exist_ok=True)
     with open('models/filenames.pkl', 'wb') as f:
         pickle.dump(filenames, f)
@@ -128,7 +76,6 @@ def batch_extract_features():
     extractor = FeatureExtractor(model_name="VGG-Face")
 
     print("\n🔄 Extracting features...")
-    print(f"⚠️ Images with no faces will be skipped")
     feature_vectors = []
     failed_count = 0
 
