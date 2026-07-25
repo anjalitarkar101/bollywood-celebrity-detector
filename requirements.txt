@@ -3,8 +3,7 @@
 # ==========================================
 
 # Core Dependencies
-tensorflow-macos==2.13.0
-tensorflow-metal==1.2.0
+tensorflow==2.13.0
 mtcnn==0.1.0
 
 
