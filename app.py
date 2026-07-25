@@ -93,6 +93,9 @@ def main():
     # Process Uploaded Image
     # ==========================================
     if uploaded_image is not None:
+        # Create uploads folder if it does not exist
+        os.makedirs("uploads", exist_ok=True)
+
         # Save uploaded image
         file_path = os.path.join('uploads', uploaded_image.name)
 
